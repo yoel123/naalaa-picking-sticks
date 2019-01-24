@@ -1,4 +1,8 @@
+import "Keycodes.lib"
+
 set window (screenw()-300 )/2, (screenh() - 400)/2, 520, 540
+
+
 
 set redraw off
 
@@ -7,7 +11,7 @@ p?
 p.x = 10
 p.y = 10
 p.w = 20
-p.h = 20
+  p.h = 20
 p.speed = 3;
 p.frame = 2
 
@@ -35,92 +39,90 @@ set image grid player, 4, 5
 
 rem ---------game loop
 do
-	set color 0, 0, 0
-	cls
+    set color 0, 0, 0
+    cls
 
 rem ---------------start game loop--------------
 
-	rem --------------------- update
-	m = keyboardControl(p)
-	rem if player toch stick move stick to a random pos and add1 to points
-	if collide(p,s)
-		s.x = rnd(300)
-		s.y = rnd(300)
-		points = points+1
-	endif
-	
+    rem --------------------- update
+    m = keyboardControl(p)
+    rem if player toch stick move stick to a random pos and add1 to points
+    if collide(p,s)
+        s.x = rnd(300)
+        s.y = rnd(300)
+        points = points+1
+    endif
+    
 
-	rem -------------------- render
-	set color 255, 255, 255
-	draw image stickImg  , s.x, s.y
-	draw image player , p.x, p.y,p.frame
-	rem draw points to screen
-	set caret 10, 10
-	write "points: ",points 
-	rem print rank
-	rank = rankHandale(points)
-	set caret 150, 10
-	write "rank: ",rank
+    rem -------------------- render
+    set color 255, 255, 255
+    draw image stickImg  , s.x, s.y
+    draw image player , p.x, p.y,p.frame
+    rem draw points to screen
+    set caret 10, 10
+    write "points: ",points 
+    rem print rank
+    rank = rankHandale(points)
+    set caret 150, 10
+    write "rank: ",rank
 
 rem ---------------end game loop----------------------
-	redraw
-	wait 20
+    redraw
+    wait 20
 until keydown(" ") or not running()
 
 
 function keyboardControl(&p?)
 
 
-		rem up
-	  if keydown(38) 
-			p.y = p.y - p.speed
-			p.frame = 0
+        rem up
+      if keydown(VK_UP) 
+            p.y = p.y - p.speed
+            p.frame = 0
 
-		endif
-		rem down
-		if keydown(40) 
-			p.y = p.y + p.speed
-			p.frame = 2
-		endif
-		rem left
-		if keydown(37)
-			p.x = p.x - p.speed
-			p.frame = 3
-	  endif 
-		rem right
-		if keydown(39)
-			p.x = p.x + p.speed
-			p.frame = 1
-	  endif
+        endif
+        rem down
+        if keydown(VK_DOWN) 
+            p.y = p.y + p.speed
+            p.frame = 2
+        endif
+        rem left
+        if keydown(VK_LEFT)
+            p.x = p.x - p.speed
+            p.frame = 3
+      endif 
+        rem right
+        if keydown(VK_RIGHT)
+            p.x = p.x + p.speed
+            p.frame = 1
+      endif
 
-	return 0
+    return 0
 endfunc  
 rem end kyboard control
 
 rem hit test function
-function collide(&a?, &b?)
-	if a.x + a.w < b.x then return false
-	if a.x > b.x + b.w then return false
-	if a.y + a.h < b.y then return false
-	if a.y > b.y + b.h then return false
-	return true
+function collide(a?, b?)
+    if a.x + a.w < b.x then return false
+    if a.x > b.x + b.w then return false
+    if a.y + a.h < b.y then return false
+    if a.y > b.y + b.h then return false
+    return true
 endfunc
 rem end collide
 
 rem rank handler function (changes rank text )
 function rankHandale$(points)
-	rank$="none"
-	if points > 10 then rank = "stick picker"
-	if points > 20 then rank = "pro stick picker"
-	if points > 25 then rank = "master stick picker"
-	if points > 30 then rank = "no life"
-	if points > 35 then rank = "you shod stop you know"
-	if points > 40 then rank = "this game never ends"
-	if points > 50 then rank = "good job you win"
-	if points > 60 then rank = "you can stop now"
+    rank$="none"
+    if points > 10 then rank = "stick picker"
+    if points > 20 then rank = "pro stick picker"
+    if points > 25 then rank = "master stick picker"
+    if points > 30 then rank = "no life"
+    if points > 35 then rank = "you shod stop you know"
+    if points > 40 then rank = "this game never ends"
+    if points > 50 then rank = "good job you win"
+    if points > 60 then rank = "you can stop now"
 
-	return rank
+    return rank
 endfunc
 rem end rankHandale
-
-
